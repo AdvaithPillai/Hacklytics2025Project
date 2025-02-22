@@ -1,7 +1,10 @@
+#Import Streamlit Library
 import streamlit as st
+
 
 st.set_page_config(layout="wide")
 
+#Placeholder Data for the right side
 def get_suitable_insurance(age, conditions, plan_type, budget, family_ages=[]):
     """Returns suitable insurance plans based on age, conditions, and plan type."""
     insurance_options = {
@@ -22,6 +25,7 @@ def get_suitable_insurance(age, conditions, plan_type, budget, family_ages=[]):
 
     return plans
 
+
 # Initialize session state for conditions
 if "conditions" not in st.session_state:
     st.session_state.conditions = []
@@ -29,6 +33,8 @@ if "conditions" not in st.session_state:
 # **Layout: Shift col1 more to the left & increase gap**
 col1, spacer, col2 = st.columns([1.5, 0.8, 2])  # Increased col1 size & spacer
 
+
+#Column 1 (Form Data)
 with col1:
 
     # Heading
@@ -82,8 +88,53 @@ with col1:
         # Submit Button for the form
         submit_button = st.form_submit_button(label="Submit")
 
+    #Check when submit button is pressed
+    # **Processing Submission**
+    if submit_button:  # This runs only when form is submitted
+        # Construct JSON Data
+        data = {
+            "name": name,
+            "age": age,
+            "conditions": st.session_state.conditions,
+            "plan_type": plan_type,
+            "family_ages": family_ages if plan_type == "Family" else []
+        }
+
+        #Print out Submit data (Debugging)
+        st.write(data)
+
+        #try:
+            # Send JSON Data to Backend
+            #response = requests.post(BACKEND_URL, json=data)
+
+            #if response.status_code == 200:
+                #result = response.json()  # Expecting JSON response from backend
+                #st.success("Insurance plans received successfully!")
+                #st.write(result)
+
+                # Update session state with the result from backend
+                #st.session_state.insurance_plans = result
+
+            #else:
+                #st.error("Error from backend: " + response.text)
+
+        #except requests.exceptions.RequestException as e:
+            #st.error(f"Request failed: {e}")
+            
+            # Optionally, you could fallback to default or local logic
+            #plans = get_suitable_insurance(age, st.session_state.conditions, plan_type, budget)
+            #st.session_state.insurance_plans = plans
+
+    # Display the insurance plans stored in session state
+    #if "insurance_plans" in st.session_state:
+        #st.write(st.session_state.insurance_plans)
+
+
+
 # **This prevents col2 from being cleared when updating conditions**
+#Column 2
 with col2:
+
     st.header("Suitable Insurance Plans")
 
     # **Top section - Placeholder for total estimated price**
