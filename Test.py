@@ -150,7 +150,7 @@ with col1:
         # Common Inputs
         name = st.text_input("Name")
         age = st.number_input("Age", min_value=0, max_value=120, step=1)
-        budget = st.slider("Select Budget ($)", min_value=0, max_value=200000, step=1000, value=50000)
+        budget = st.slider("Select Yearly income($)", min_value=0, max_value=1000000, step=1000, value=50000)
 
         st.subheader("Medical Conditions")
         new_condition = st.text_input("Enter a medical condition", key="condition_input")
