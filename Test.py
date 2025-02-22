@@ -200,17 +200,20 @@ with col1:
     # **Display Loading Spinner while processing**
     
 
-        # Take data into JSON
-        data = {
-            "name": name,
-            "age": age,
-            "conditions": st.session_state.conditions,
-            "plan_type": plan_type,
-            "family_ages": family_ages if plan_type == "Family" else []
-        }
+    if submit_button:
+            # Prepare data as a JSON object
+            user_data = {
+                "name": name,
+                "age": age,
+                "conditions": [condition.strip() for condition in conditions.split(",")] if conditions else [],
+                "budget": budget,
+            }
 
-        # Display Data
-        st.write(data)
+            # Send the JSON data to backend for processing
+            processed_data = hacklytics_backend.process_data(user_data)
+
+            # Display the processed result to the user
+            st.write("Processed Data:", processed_data)
 
 # Column 2: Display suitable insurance plans
 with col2:

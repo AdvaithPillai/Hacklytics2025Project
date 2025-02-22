@@ -7,8 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1mWkiW4GILM7NjVsYkKIdOaexsZY_0awG
 """
 
-!pip install -U -q "google-generativeai>=0.8.2"
-!pip install pypdf
 
 import pandas as pd
 import sklearn
@@ -118,10 +116,6 @@ User JSON input: {user_input}
 # import necessary modules.
 
 try:
-    # Mount google drive
-    from google.colab import drive
-
-    drive.mount("/gdrive")
 
     # The SDK will automatically read it from the GOOGLE_API_KEY environment variable.
     import os
