@@ -1,4 +1,5 @@
 import streamlit as st
+import time  # to simulate processing time
 
 # Set page configuration for wide layout
 st.set_page_config(layout="wide")
@@ -6,10 +7,13 @@ st.set_page_config(layout="wide")
 # Inject custom CSS for styling
 st.markdown("""
     <style>
+        /* Load custom font from Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Anton:wght@400;500&display=swap');
+
         /* General background and font styles */
         body {
             background-color: #e3f2fd;  /* Light Blue background */
-            font-family: 'Arial', sans-serif;
+            font-family: 'Anton', sans-serif;  /* Use Anton font */
         }
 
         /* Center the content */
@@ -30,6 +34,14 @@ st.markdown("""
             border-radius: 8px;
             font-size: 16px;
             width: 100%;
+        }
+
+        /* Input labels (questions) - Change font size, weight, and color */
+        .stTextInput label, .stNumberInput label, .stRadio label, .stSlider label {
+            font-size: 18px;  /* Larger font size */
+            font-weight: 500;  /* Medium weight */
+            color: #333333;  /* Dark gray color */
+            margin-bottom: 10px;  /* Space between label and input */
         }
 
         /* Slider style */
@@ -144,7 +156,7 @@ with col1:
     # Heading
     st.header("Patient Data Input")
 
-    #Check if the user is an individual or a family
+    # Check if the user is an individual or a family
     plan_type = st.radio("Select Plan Type:", ["Individual", "Family"])
 
     # Create Form
@@ -159,7 +171,7 @@ with col1:
                 for i in range(st.session_state.family_size):
                     member_age = st.number_input(f"Age of Family Member {i+1}", min_value=0, max_value=120, step=1, key=f"family_member_{i}")
                     family_ages.append(member_age)
-                
+
         # Common Inputs
         name = st.text_input("Name")
         age = st.number_input("Age", min_value=0, max_value=120, step=1)
@@ -185,10 +197,10 @@ with col1:
 
         submit_button = st.form_submit_button(label="Submit")
 
-    # Check when submit button is pressed
-    if submit_button:  
-        
-        #Take data into JSON
+    # **Display Loading Spinner while processing**
+    
+
+        # Take data into JSON
         data = {
             "name": name,
             "age": age,
@@ -197,21 +209,24 @@ with col1:
             "family_ages": family_ages if plan_type == "Family" else []
         }
 
-        #Write Data
+        # Display Data
         st.write(data)
 
-# **This prevents col2 from being cleared when updating conditions**
-# Column 2
+# Column 2: Display suitable insurance plans
 with col2:
     st.header("Suitable Insurance Plans")
 
-    # **Top section - Placeholder for total estimated price**
+    # Placeholder for estimated monthly cost
     st.markdown(f"## Estimated Monthly Cost: **${budget // 12:,}**")  # Approximate monthly budget
 
-    # **Bottom section - Four blank cards**
+    # Display insurance options (simulate a loading effect)
     st.markdown("### Select an Insurance Plan:")
 
     cols = st.columns(4)  # Create four equal columns
+
+    # Here, you can simulate the time it takes to fetch insurance plans
+    with st.spinner("Fetching insurance options..."):
+        time.sleep(3)  # Simulate some delay before displaying plans
 
     plans = get_suitable_insurance(age, st.session_state.conditions, plan_type, budget, family_ages)
 
