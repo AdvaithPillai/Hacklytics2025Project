@@ -1,10 +1,116 @@
-#Import Streamlit Library
 import streamlit as st
 
-
+# Set page configuration for wide layout
 st.set_page_config(layout="wide")
 
-#Placeholder Data for the right side
+# Inject custom CSS for styling
+st.markdown("""
+    <style>
+        /* General background and font styles */
+        body {
+            background-color: #e3f2fd;  /* Light Blue background */
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Center the content */
+        .stApp {
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        /* Header Styles */
+        h1, h2 {
+            color: #1e88e5;  /* Blue color for headers */
+        }
+
+        /* Form Section (left column) */
+        .stTextInput>div>input, .stNumberInput>div>input {
+            border: 2px solid #1e88e5;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        /* Slider style */
+        .stSlider>div>label {
+            font-size: 14px;
+            color: #333333;
+        }
+
+        /* Radio button style */
+        .stRadio>div>label {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Button styles */
+        .stButton>button {
+            background-color: #1e88e5;
+            color: white;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .stButton>button:hover {
+            background-color: #1565c0;
+        }
+
+        /* Form Submit Button */
+        .stFormSubmitButton>button {
+            background-color: #007BFF;
+            color: white;
+            font-size: 18px;
+            border-radius: 8px;
+            padding: 10px 20px;
+            width: 100%;
+        }
+
+        .stFormSubmitButton>button:hover {
+            background-color: #0069d9;
+        }
+
+        /* Insurance plan cards style */
+        .insurance-card {
+            height: 150px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .insurance-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Columns for insurance cards */
+        .stColumns>div {
+            margin-right: 10px;
+            margin-left: 10px;
+        }
+
+        /* Text for the insurance plan cards */
+        .insurance-plan-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .insurance-plan-description {
+            color: #777;
+        }
+
+    </style>
+""", unsafe_allow_html=True)
+
+# Function to get suitable insurance based on input
 def get_suitable_insurance(age, conditions, plan_type, budget, family_ages=[]):
     """Returns suitable insurance plans based on age, conditions, and plan type."""
     insurance_options = {
@@ -25,7 +131,6 @@ def get_suitable_insurance(age, conditions, plan_type, budget, family_ages=[]):
 
     return plans
 
-
 # Initialize session state for conditions
 if "conditions" not in st.session_state:
     st.session_state.conditions = []
@@ -33,29 +138,21 @@ if "conditions" not in st.session_state:
 # **Layout: Shift col1 more to the left & increase gap**
 col1, spacer, col2 = st.columns([1.5, 0.8, 2])  # Increased col1 size & spacer
 
-
-#Column 1 (Form Data)
+# Column 1 (Form Data)
 with col1:
-
     # Heading
     st.header("Patient Data Input")
 
     # Create Form
     with st.form(key="user_form"):
-    
-        # Plan Type Selection
         plan_type = st.radio("Select Plan Type:", ["Individual", "Family"])
 
         # Common Inputs
         name = st.text_input("Name")
         age = st.number_input("Age", min_value=0, max_value=120, step=1)
-
-        # **Budget Slider**
         budget = st.slider("Select Budget ($)", min_value=0, max_value=200000, step=1000, value=50000)
 
-        # Handling Multiple Medical Conditions
         st.subheader("Medical Conditions")
-
         new_condition = st.text_input("Enter a medical condition", key="condition_input")
 
         col_add, col_remove = st.columns([1, 1])
@@ -63,13 +160,11 @@ with col1:
             if st.form_submit_button("+ Add Condition"):
                 if new_condition and new_condition not in st.session_state.conditions:
                     st.session_state.conditions.append(new_condition)
-                    #st.session_state["condition_input"] = ""  # Reset text input field
 
         with col_remove:
             if st.form_submit_button("- Clear Conditions"):
                 st.session_state.conditions = []
 
-        # Display added conditions
         if st.session_state.conditions:
             st.write("Current Conditions:")
             for cond in st.session_state.conditions:
@@ -79,19 +174,14 @@ with col1:
         family_ages = []
         if plan_type == "Family":
             family_size = st.number_input("Number of Family Members", min_value=1, step=1)
-            
-            # Dynamically generate input boxes for each family member's age
             for i in range(family_size):
                 member_age = st.number_input(f"Age of Family Member {i+1}", min_value=0, max_value=120, step=1, key=f"family_member_{i}")
                 family_ages.append(member_age)
 
-        # Submit Button for the form
         submit_button = st.form_submit_button(label="Submit")
 
-    #Check when submit button is pressed
-    # **Processing Submission**
+    # Check when submit button is pressed
     if submit_button:  # This runs only when form is submitted
-        # Construct JSON Data
         data = {
             "name": name,
             "age": age,
@@ -100,41 +190,11 @@ with col1:
             "family_ages": family_ages if plan_type == "Family" else []
         }
 
-        #Print out Submit data (Debugging)
         st.write(data)
 
-        #try:
-            # Send JSON Data to Backend
-            #response = requests.post(BACKEND_URL, json=data)
-
-            #if response.status_code == 200:
-                #result = response.json()  # Expecting JSON response from backend
-                #st.success("Insurance plans received successfully!")
-                #st.write(result)
-
-                # Update session state with the result from backend
-                #st.session_state.insurance_plans = result
-
-            #else:
-                #st.error("Error from backend: " + response.text)
-
-        #except requests.exceptions.RequestException as e:
-            #st.error(f"Request failed: {e}")
-            
-            # Optionally, you could fallback to default or local logic
-            #plans = get_suitable_insurance(age, st.session_state.conditions, plan_type, budget)
-            #st.session_state.insurance_plans = plans
-
-    # Display the insurance plans stored in session state
-    #if "insurance_plans" in st.session_state:
-        #st.write(st.session_state.insurance_plans)
-
-
-
 # **This prevents col2 from being cleared when updating conditions**
-#Column 2
+# Column 2
 with col2:
-
     st.header("Suitable Insurance Plans")
 
     # **Top section - Placeholder for total estimated price**
@@ -145,21 +205,18 @@ with col2:
 
     cols = st.columns(4)  # Create four equal columns
 
-    for idx in range(4):
-        with cols[idx]:
+    plans = get_suitable_insurance(age, st.session_state.conditions, plan_type, budget, family_ages)
+
+    for idx, plan in enumerate(plans):
+        with cols[idx % 4]:
             st.markdown(
                 f"""
-                <div style="
-                    height: 150px; 
-                    background-color: #f0f0f0; 
-                    border-radius: 10px; 
-                    display: flex; 
-                    align-items: center; 
-                    justify-content: center; 
-                    font-weight: bold;
-                ">
-                    Plan {idx+1}
+                <div class="insurance-card">
+                    <div>
+                        <div class="insurance-plan-title">{plan}</div>
+                        <div class="insurance-plan-description">Details for {plan}</div>
+                    </div>
                 </div>
                 """,
                 unsafe_allow_html=True
-            ) 
+            )
