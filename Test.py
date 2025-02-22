@@ -1,25 +1,5 @@
 import streamlit as st
 
-def get_suitable_insurance(age, conditions, plan_type, family_ages=[]):
-    """Returns suitable insurance plans based on age, conditions, and plan type."""
-    insurance_options = {
-        "General Health": ["Plan A", "Plan B"],
-        "Chronic Condition": ["Plan C", "Plan D"],
-        "Senior Care": ["Plan E", "Plan F"]
-    }
-    
-    if age > 60:
-        plans = insurance_options["Senior Care"]
-    elif any(cond.lower() in ["diabetes", "hypertension"] for cond in conditions):
-        plans = insurance_options["Chronic Condition"]
-    else:
-        plans = insurance_options["General Health"]
-
-    if plan_type == "Family":
-        plans = [plan + " (Family Plan)" for plan in plans]  
-
-    return plans
-
 # Initialize session state for conditions
 if "conditions" not in st.session_state:
     st.session_state.conditions = []
@@ -27,50 +7,59 @@ if "conditions" not in st.session_state:
 # **Layout: Shift col1 more to the left & increase gap**
 col1, spacer, col2 = st.columns([1.5, 0.8, 2])  # Increased col1 size & spacer
 
+# Column 1 (Data Input)
 with col1:
+
+    # Heading
     st.header("Patient Data Input")
+
+    # Create Form
+    with st.form(key="user_form"):
     
-    # Plan Type Selection
-    plan_type = st.radio("Select Plan Type:", ["Individual", "Family"])
+        # Plan Type Selection
+        plan_type = st.radio("Select Plan Type:", ["Individual", "Family"])
 
-    # Common Inputs
-    name = st.text_input("Name")
-    age = st.number_input("Age", min_value=0, max_value=120, step=1)
+        # Common Inputs
+        name = st.text_input("Name")
+        age = st.number_input("Age", min_value=0, max_value=120, step=1)
 
-    # Handling Multiple Medical Conditions
-    st.subheader("Medical Conditions")
+        # Handling Multiple Medical Conditions
+        st.subheader("Medical Conditions")
 
-    new_condition = st.text_input("Enter a medical condition", key="condition_input")
+        new_condition = st.text_input("Enter a medical condition", key="condition_input")
 
-    col_add, col_remove = st.columns([1, 1])
-    with col_add:
-        if st.button("+ Add Condition"):
-            if new_condition and new_condition not in st.session_state.conditions:
-                st.session_state.conditions.append(new_condition)
-                st.session_state["condition_input"] = ""  # Reset text input field
-                st.experimental_rerun()  # Force rerun to update UI
+        col_add, col_remove = st.columns([1, 1])
+        with col_add:
+            if st.form_submit_button("+ Add Condition"):
+                if new_condition and new_condition not in st.session_state.conditions:
+                    st.session_state.conditions.append(new_condition)
+                    st.session_state["condition_input"] = ""  # Reset text input field
+                    st.experimental_rerun()  # Force rerun to update UI
 
-    with col_remove:
-        if st.button("- Clear Conditions"):
-            st.session_state.conditions = []
+        with col_remove:
+            if st.form_submit_button("- Clear Conditions"):
+                st.session_state.conditions = []
 
-    # Display added conditions
-    if st.session_state.conditions:
-        st.write("Current Conditions:")
-        for cond in st.session_state.conditions:
-            st.write(f"- {cond}")
+        # Display added conditions
+        if st.session_state.conditions:
+            st.write("Current Conditions:")
+            for cond in st.session_state.conditions:
+                st.write(f"- {cond}")
 
-    # Family Plan Inputs
-    family_ages = []
-    if plan_type == "Family":
-        family_size = st.number_input("Number of Family Members", min_value=1, step=1)
-        
-        # Dynamically generate input boxes for each family member's age
-        for i in range(family_size):
-            member_age = st.number_input(f"Age of Family Member {i+1}", min_value=0, max_value=120, step=1, key=f"family_member_{i}")
-            family_ages.append(member_age)
+        # Family Plan Inputs
+        family_ages = []
+        if plan_type == "Family":
+            family_size = st.number_input("Number of Family Members", min_value=1, step=1)
+            
+            # Dynamically generate input boxes for each family member's age
+            for i in range(family_size):
+                member_age = st.number_input(f"Age of Family Member {i+1}", min_value=0, max_value=120, step=1, key=f"family_member_{i}")
+                family_ages.append(member_age)
 
-# **Increased space between columns**
+        # Submit Button for the form
+        submit_button = st.form_submit_button(label="Submit")
+
+# **No change to column 2**
 with col2:
     st.header("Suitable Insurance Plans")
 
