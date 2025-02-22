@@ -34,12 +34,9 @@
 					
 			<!--Search Bar-->
 			<div class="mb-3">
-					
-				<!--Input Box-->
-				<input type="text" id="search" class="form-control" placeholder="Type a guide name...">
 						
 				<!--Button-->
-				<button id="search-btn" class="btn btn-primary mt-3">Search</button>
+				<button id="search-btn" class="btn btn-primary mt-3" href="insurance_matcher_form.php">Try our Insurance Plan Matcher</button>
 						
 		</div>
 
