@@ -140,13 +140,30 @@ col1, spacer, col2 = st.columns([1.5, 0.8, 2])  # Increased col1 size & spacer
 
 # Column 1 (Form Data)
 with col1:
+
     # Heading
     st.header("Patient Data Input")
 
+    #Check if the user is an individual or a family
+    plan_type = st.radio("Select Plan Type:", ["Individual", "Family"])
+
+    # Update family size in session state if the individual is in a family (Updates the form fields)
+    if plan_type == "Family":
+        st.session_state.family_size = st.number_input("Number of Family Members", min_value=1, step=1)
+    else:
+        st.session_state.family_size = 0
+
+
     # Create Form
     with st.form(key="user_form"):
-        plan_type = st.radio("Select Plan Type:", ["Individual", "Family"])
 
+        # Family Plan Inputs
+        family_ages = []
+        if plan_type == "Family" and st.session_state.family_size > 0:
+            for i in range(st.session_state.family_size):
+                member_age = st.number_input(f"Age of Family Member {i+1}", min_value=0, max_value=120, step=1, key=f"family_member_{i}")
+                family_ages.append(member_age)
+                
         # Common Inputs
         name = st.text_input("Name")
         age = st.number_input("Age", min_value=0, max_value=120, step=1)
@@ -170,18 +187,12 @@ with col1:
             for cond in st.session_state.conditions:
                 st.write(f"- {cond}")
 
-        # Family Plan Inputs
-        family_ages = []
-        if plan_type == "Family":
-            family_size = st.number_input("Number of Family Members", min_value=1, step=1)
-            for i in range(family_size):
-                member_age = st.number_input(f"Age of Family Member {i+1}", min_value=0, max_value=120, step=1, key=f"family_member_{i}")
-                family_ages.append(member_age)
-
         submit_button = st.form_submit_button(label="Submit")
 
     # Check when submit button is pressed
-    if submit_button:  # This runs only when form is submitted
+    if submit_button:  
+        
+        #Take data into JSON
         data = {
             "name": name,
             "age": age,
@@ -190,6 +201,7 @@ with col1:
             "family_ages": family_ages if plan_type == "Family" else []
         }
 
+        #Write Data
         st.write(data)
 
 # **This prevents col2 from being cleared when updating conditions**
