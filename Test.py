@@ -1,6 +1,7 @@
 import streamlit as st
 
 def get_suitable_insurance(age, conditions, plan_type, family_ages=[]):
+    """Returns suitable insurance plans based on age, conditions, and plan type."""
     insurance_options = {
         "General Health": ["Plan A", "Plan B"],
         "Chronic Condition": ["Plan C", "Plan D"],
@@ -23,8 +24,8 @@ def get_suitable_insurance(age, conditions, plan_type, family_ages=[]):
 if "conditions" not in st.session_state:
     st.session_state.conditions = []
 
-# Layout: Input on one side, Output on the other
-col1, spacer, col2 = st.columns([1, 0.5, 1])  
+# **Layout: Shift col1 more to the left & increase gap**
+col1, spacer, col2 = st.columns([1.5, 0.8, 2])  # Increased col1 size & spacer
 
 with col1:
     st.header("Patient Data Input")
@@ -66,14 +67,36 @@ with col1:
         
         # Dynamically generate input boxes for each family member's age
         for i in range(family_size):
-            member_age = st.number_input(f"Age of Family Member {i+1}", min_value=0, max_value=120, step=1)
+            member_age = st.number_input(f"Age of Family Member {i+1}", min_value=0, max_value=120, step=1, key=f"family_member_{i}")
             family_ages.append(member_age)
 
+# **Increased space between columns**
 with col2:
     st.header("Suitable Insurance Plans")
-    
-    if age and st.session_state.conditions:
-        suitable_insurance = get_suitable_insurance(age, st.session_state.conditions, plan_type, family_ages)
-        st.write(f"Recommended Plans for {name}:")
-        for plan in suitable_insurance:
-            st.write(f"- {plan}")
+
+    # **Top section - Placeholder for total estimated price**
+    st.markdown("## Estimated Monthly Cost: **$____**")
+
+    # **Bottom section - Four blank cards**
+    st.markdown("### Select an Insurance Plan:")
+
+    cols = st.columns(4)  # Create four equal columns
+
+    for idx in range(4):
+        with cols[idx]:
+            st.markdown(
+                """
+                <div style="
+                    height: 150px; 
+                    background-color: #f0f0f0; 
+                    border-radius: 10px; 
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center; 
+                    font-weight: bold;
+                ">
+                    Plan {idx+1}
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
