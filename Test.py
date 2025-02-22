@@ -57,8 +57,7 @@ with col1:
             if st.form_submit_button("+ Add Condition"):
                 if new_condition and new_condition not in st.session_state.conditions:
                     st.session_state.conditions.append(new_condition)
-                    st.session_state["condition_input"] = ""  # Reset text input field
-                    st.experimental_rerun()  # Force rerun to update UI
+                    #st.session_state["condition_input"] = ""  # Reset text input field
 
         with col_remove:
             if st.form_submit_button("- Clear Conditions"):
@@ -83,7 +82,7 @@ with col1:
         # Submit Button for the form
         submit_button = st.form_submit_button(label="Submit")
 
-# **Increased space between columns**
+# **This prevents col2 from being cleared when updating conditions**
 with col2:
     st.header("Suitable Insurance Plans")
 
