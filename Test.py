@@ -1,6 +1,6 @@
 import streamlit as st
 
-def get_suitable_insurance(age, conditions, plan_type, family_ages=[]):
+def get_suitable_insurance(age, conditions, plan_type, budget, family_ages=[]):
     """Returns suitable insurance plans based on age, conditions, and plan type."""
     insurance_options = {
         "General Health": ["Plan A", "Plan B"],
@@ -29,7 +29,7 @@ col1, spacer, col2 = st.columns([1.5, 0.8, 2])  # Increased col1 size & spacer
 
 with col1:
 
-    #Heading
+    # Heading
     st.header("Patient Data Input")
 
     # Create Form
@@ -41,6 +41,9 @@ with col1:
         # Common Inputs
         name = st.text_input("Name")
         age = st.number_input("Age", min_value=0, max_value=120, step=1)
+
+        # **Budget Slider**
+        budget = st.slider("Select Budget ($)", min_value=0, max_value=200000, step=1000, value=50000)
 
         # Handling Multiple Medical Conditions
         st.subheader("Medical Conditions")
@@ -83,7 +86,7 @@ with col2:
     st.header("Suitable Insurance Plans")
 
     # **Top section - Placeholder for total estimated price**
-    st.markdown("## Estimated Monthly Cost: **$____**")
+    st.markdown(f"## Estimated Monthly Cost: **${budget // 12:,}**")  # Approximate monthly budget
 
     # **Bottom section - Four blank cards**
     st.markdown("### Select an Insurance Plan:")
@@ -93,7 +96,7 @@ with col2:
     for idx in range(4):
         with cols[idx]:
             st.markdown(
-                """
+                f"""
                 <div style="
                     height: 150px; 
                     background-color: #f0f0f0; 
@@ -107,4 +110,4 @@ with col2:
                 </div>
                 """,
                 unsafe_allow_html=True
-            )
+            ) 
