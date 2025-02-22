@@ -36,11 +36,24 @@
 			<div class="mb-3">
 						
 				<!--Button-->
-				<button id="search-btn" class="btn btn-primary mt-3" href="insurance_matcher_form.php">Try our Insurance Plan Matcher</button>
+				<button id="search-btn" class="btn btn-primary mt-3">Try our Insurance Plan Matcher</button>
 						
 		</div>
 
+		<!--JavaScript-->
+		<script>
+		 
+			//Check if Search Button is Clicked
+			document.getElementById("search-btn").addEventListener("click", function () {
+					
+				//Go to the Insurance Matcher
+				window.location.href = "insurance_matcher_form.php";
+		
+			});
+
 		</script>
+
+	
 	
 	</body>
   
