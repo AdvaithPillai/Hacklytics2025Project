@@ -1,72 +1,33 @@
-# import the streamlit library
 import streamlit as st
 
+def get_suitable_insurance(age, condition):
+    insurance_options = {
+        "General Health": ["Plan A", "Plan B"],
+        "Chronic Condition": ["Plan C", "Plan D"],
+        "Senior Care": ["Plan E", "Plan F"]
+    }
+    
+    if age > 60:
+        return insurance_options["Senior Care"]
+    elif condition.lower() in ["diabetes", "hypertension"]:
+        return insurance_options["Chronic Condition"]
+    else:
+        return insurance_options["General Health"]
 
-# give a title to our app
-st.title('Welcome to BMI Calculator')
+# Using a spacer column
+col1, spacer, col2 = st.columns([1, 0.5, 1])  
 
+with col1:
+    st.header("Patient Data Input")
+    name = st.text_input("Name")
+    age = st.number_input("Age", min_value=0, max_value=120, step=1)
+    condition = st.text_input("Medical Condition")
 
-# TAKE WEIGHT INPUT in kgs
-weight = st.number_input("Enter your weight (in kgs)")
-
-
-# TAKE HEIGHT INPUT
-# radio button to choose height format
-status = st.radio('Select your height format: ',
-                  ('cms', 'meters', 'feet'))
-
-
-# compare status value
-if(status == 'cms'):
-    # take height input in centimeters
-    height = st.number_input('Centimeters')
-
-
-    try:
-        bmi = weight / ((height/100)**2)
-    except:
-        st.text("Enter some value of height")
-
-
-elif(status == 'meters'):
-    # take height input in meters
-    height = st.number_input('Meters')
-
-
-    try:
-        bmi = weight / (height ** 2)
-    except:
-        st.text("Enter some value of height")
-
-
-else:
-    # take height input in feet
-    height = st.number_input('Feet')
-
-
-    # 1 meter = 3.28
-    try:
-        bmi = weight / (((height/3.28))**2)
-    except:
-        st.text("Enter some value of height")
-
-
-# check if the button is pressed or not
-if(st.button('Calculate BMI')):
-
-
-    # print the BMI INDEX
-    st.text("Your BMI Index is {}.".format(bmi))
-
-
-    # give the interpretation of BMI index
-    if(bmi < 16):
-        st.error("You are Extremely Underweight")
-    elif(bmi >= 16 and bmi < 18.5):
-        st.warning("You are Underweight")
-    elif(bmi >= 18.5 and bmi < 25):
-        st.success("Healthy")
-    elif(bmi >= 25 and bmi < 30):
-        st.warning("Overweight")
-    elif(bmi >= 30):
-        st.error("Extremely Overweight")
+with col2:
+    st.header("Suitable Insurance Plans")
+    
+    if age and condition:
+        suitable_insurance = get_suitable_insurance(age, condition)
+        st.write(f"Recommended Plans for {name}:")
+        for plan in suitable_insurance:
+            st.write(f"- {plan}")
