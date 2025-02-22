@@ -1,5 +1,7 @@
 import streamlit as st
 
+st.set_page_config(layout="wide")
+
 def get_suitable_insurance(age, conditions, plan_type, family_ages=[]):
     """Returns suitable insurance plans based on age, conditions, and plan type."""
     insurance_options = {
