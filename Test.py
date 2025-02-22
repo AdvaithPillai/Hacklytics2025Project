@@ -1,7 +1,7 @@
 import streamlit as st
 
+# Function to get suitable insurance (same logic as before)
 def get_suitable_insurance(age, conditions, plan_type, family_ages=[]):
-    """Returns suitable insurance plans based on age, conditions, and plan type."""
     insurance_options = {
         "General Health": ["Plan A", "Plan B"],
         "Chronic Condition": ["Plan C", "Plan D"],
@@ -20,7 +20,7 @@ def get_suitable_insurance(age, conditions, plan_type, family_ages=[]):
 
     return plans
 
-# Initialize session state for conditions
+# Initialize session state for conditions and new condition input
 if "conditions" not in st.session_state:
     st.session_state.conditions = []
 
@@ -34,44 +34,43 @@ def clear_condition_input():
 # Layout: Input on one side, Output on the other
 col1, spacer, col2 = st.columns([1, 0.5, 1])
 
-# Column 1 (Data Input)
 with col1:
-
-    # Heading
     st.header("Patient Data Input")
-
-    # Create Form
-    with st.form(key="user_form"):
     
-        # Plan Type Selection
-        plan_type = st.radio("Select Plan Type:", ["Individual", "Family"])
+    # Plan Type Selection
+    plan_type = st.radio("Select Plan Type:", ["Individual", "Family"])
 
-        # Common Inputs
-        name = st.text_input("Name")
-        age = st.number_input("Age", min_value=0, max_value=120, step=1)
+    # Common Inputs
+    name = st.text_input("Name")
+    age = st.number_input("Age", min_value=0, max_value=120, step=1)
 
-        # Handling Multiple Medical Conditions
-        st.subheader("Medical Conditions")
+    # Handling Multiple Medical Conditions
+    st.subheader("Medical Conditions")
 
-    new_condition = st.text_input("Enter a medical condition", key="condition_input")
+    with st.form("condition_form"):
+        f1, f2 = st.columns([3, 1])  # Wider input, smaller button
+        with f1:
+            st.text_input("Enter a medical condition", key="new_condition")
+        with f2:
+            st.form_submit_button(label="+", on_click=clear_condition_input)
 
-    col_add, col_remove = st.columns([1, 1])
-    with col_add:
-        if st.button("+ Add Condition"):
-            if new_condition and new_condition not in st.session_state.conditions:
-                st.session_state.conditions.append(new_condition)
-                st.session_state["condition_input"] = ""  # Reset text input field
-                st.experimental_rerun()  # Force rerun to update UI
+        # Submit button for adding condition
+        add_condition = st.form_submit_button(label ="Add Condition")
+        if add_condition and st.session_state.new_condition.strip():
+            condition = st.session_state.new_condition.strip()
+            if condition not in st.session_state.conditions:
+                st.session_state.conditions.append(condition)
+              # Clear input field after adding
 
-    with col_remove:
-        if st.button("- Clear Conditions"):
-            st.session_state.conditions = []
+    # Display added conditions
+    if st.session_state.conditions:
+        st.write("Current Conditions:")
+        for cond in st.session_state.conditions:
+            st.write(f"- {cond}")
 
-        # Display added conditions
-        if st.session_state.conditions:
-            st.write("Current Conditions:")
-            for cond in st.session_state.conditions:
-                st.write(f"- {cond}")
+    # Clear all conditions button
+    if st.button("- Clear Conditions"):
+        st.session_state.conditions = []
 
     # Family Plan Inputs
     family_ages = []
@@ -80,10 +79,9 @@ with col1:
         
         # Dynamically generate input boxes for each family member's age
         for i in range(family_size):
-            member_age = st.number_input(f"Age of Family Member {i+1}", min_value=0, max_value=120, step=1, key=f"family_member_{i}")
+            member_age = st.number_input(f"Age of Family Member {i+1}", min_value=0, max_value=120, step=1)
             family_ages.append(member_age)
 
-# **Increased space between columns**
 with col2:
     st.header("Suitable Insurance Plans")
     
