@@ -165,18 +165,19 @@ with col1:
     # Check if the user is an individual or a family
     plan_type = st.radio("Select Plan Type:", ["Individual", "Family"])
 
+    if plan_type == "Family":
+        # Ask for number of family members within the form itself
+        st.session_state.family_size = st.number_input("Number of Family Members", min_value=1, step=1)
+
     # Create Form
     with st.form(key="user_form"):
 
         # Family Plan Inputs
         family_ages = []
-        if plan_type == "Family":
-            # Ask for number of family members within the form itself
-            st.session_state.family_size = st.number_input("Number of Family Members", min_value=1, step=1)
-            if st.session_state.family_size > 0:
-                for i in range(st.session_state.family_size):
-                    member_age = st.number_input(f"Age of Family Member {i+1}", min_value=0, max_value=120, step=1, key=f"family_member_{i}")
-                    family_ages.append(member_age)
+        if st.session_state.family_size > 0:
+            for i in range(st.session_state.family_size):
+                member_age = st.number_input(f"Age of Family Member {i+1}", min_value=0, max_value=120, step=1, key=f"family_member_{i}")
+                family_ages.append(member_age)
 
         # Common Inputs
         name = st.text_input("Name")
