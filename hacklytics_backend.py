@@ -18,6 +18,8 @@ import base64
 import json
 import os
 
+
+
 # Returns HTML response as text.
 def get_response(user_input):
     # Load insurance data from CSV
@@ -123,7 +125,8 @@ def get_response(user_input):
 
         # The SDK will automatically read it from the GOOGLE_API_KEY environment variable.
         import os
-        api_key = os.environ.get("GOOGLE_API_KEY")
+        api_key = "AIzaSyDCDPCI8_gsiMPr1uq_8xQsHfHPHIjit_I" #change this later
+
         genai.configure(api_key=api_key)
 
     except ImportError:
