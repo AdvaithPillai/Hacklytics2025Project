@@ -91,13 +91,13 @@ def get_response(user_input):
     /// RESPONSE FORMAT ///
     [Introduction, whatever you deem necessary]
 
-    [Estimated premiums for bronze (range and average)]
-    [Estimated premiums for silver (range and average)]
-    [Estimated premiums for gold (range and average)]
-    [Estimated premiums for platinum (range and average)]
+    [Estimated premiums for <span style="color: #cd7f32;">Bronze</span> (range and average)]
+    [Estimated premiums for <span style="color: #c0c0c0;">Silver</span> (range and average)]
+    [Estimated premiums for <span style="color: #ffd700;">Gold</span> (range and average)]
+    [Estimated premiums for <span style="color: #7f8c8d;">Platinum</span> (range and average)]
 
     [Estimate deductibles for common medical scenarios (range and average) for each
-    metal level (ensure that platinum has the lowest deductibles and bronze has the
+    metal level (ensure that <span style="color: #7f8c8d;">platinum</span> has the lowest deductibles and <span style="color: #cd7f32;">bronze</span> has the
     highest)]
 
     [Estimate deductibles for specified recurring visits (range and average)]
@@ -118,7 +118,6 @@ def get_response(user_input):
 
     User JSON input: {user_input}
     """
-
     # Try to mount Google Drive (only required in Colab)
     try:
        

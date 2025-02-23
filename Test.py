@@ -150,7 +150,7 @@ if "conditions" not in st.session_state:
     st.session_state.conditions = []
 
 # **Layout: Shift col1 more to the left & increase gap**
-col1, spacer, col2 = st.columns([1.5, 0.8, 2])  # Increased col1 size & spacer
+col1, spacer, col2 = st.columns([1.5, 0.5, 3])  # Increased col2 size & reduced spacer
 
 # Column 1 (Form Data)
 with col1:
@@ -200,66 +200,25 @@ with col1:
         submit_button = st.form_submit_button(label="Submit")
 
     # **Display Loading Spinner while processing**
-    
-
     if submit_button:
-            # Prepare data as a JSON object
-            user_data = {
-                "name": name,
-                "age": age,
-                "conditions": [condition.strip() for condition in st.session_state.conditions] if st.session_state.conditions else [],
+        # Prepare data as a JSON object
+        user_data = {
+            "name": name,
+            "age": age,
+            "conditions": [condition.strip() for condition in st.session_state.conditions] if st.session_state.conditions else [],
+            "budget": budget,
+        }
 
-                "budget": budget,
-            }
-
-            # Send the JSON data to backend for processing
-            processed_data = get_response(user_data)
-
-           
+        # Send the JSON data to backend for processing
+        processed_data = get_response(user_data)
 
 # Column 2: Display suitable insurance plans
-# Column 2: Display suitable insurance plans and processed HTML data
 with col2:
     st.header("Suitable Insurance Plans")
 
-    # # Placeholder for estimated monthly cost
-    # st.markdown(f"## Estimated Monthly Cost: **${budget // 12:,}**")  # Approximate monthly budget
-
-    # # Display insurance options (simulate a loading effect)
-    # st.markdown("### Select an Insurance Plan:")
-
-    # cols = st.columns(4)  # Create four equal columns
-
-    # # Here, you can simulate the time it takes to fetch insurance plans
-    # with st.spinner("Fetching insurance options..."):
-    #     time.sleep(3)  # Simulate some delay before displaying plans
-
-    # plans = get_suitable_insurance(age, st.session_state.conditions, plan_type, budget, family_ages)
-
-    # for idx, plan in enumerate(plans):
-    #     with cols[idx % 4]:
-    #         st.markdown(
-    #             f"""
-    #             <div class="insurance-card">
-    #                 <div>
-    #                     <div class="insurance-plan-title">{plan}</div>
-    #                     <div class="insurance-plan-description">Details for {plan}</div>
-    #                 </div>
-    #             </div>
-    #             """,
-    #             unsafe_allow_html=True
-    #         )
-    
     # Display the processed HTML data in col2 after form submission
     if submit_button:
         st.markdown(f"## Processed Data", unsafe_allow_html=True)
         wrapped_html = f""" <div style="max-height: 1000px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"> {processed_data} </div> """ 
 
         components.html(wrapped_html, height=1000) # Keeps scrollability
-
-
-        # st.markdown(
-        
-        #         processed_data
-        #     , 
-        #     unsafe_allow_html=True)  # Render HTML from processed_data
