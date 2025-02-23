@@ -26,7 +26,7 @@ st.markdown("""
 
         /* Header Styles */
         h1, h2 {
-            color: #1e88e5;  /* Blue color for headers */
+            color: #1e88e5 !important;  /* Blue color for headers */
         }
 
         /* Form Section (left column) */
