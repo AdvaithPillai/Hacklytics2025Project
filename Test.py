@@ -1,6 +1,7 @@
 import streamlit as st
 import time  # to simulate processing time
 from hacklytics_backend import get_response
+import streamlit.components.v1 as components
 
 # Set page configuration for wide layout
 st.set_page_config(layout="wide")
@@ -252,8 +253,13 @@ with col2:
     # Display the processed HTML data in col2 after form submission
     if submit_button:
         st.markdown(f"## Processed Data", unsafe_allow_html=True)
-        st.markdown(
+        wrapped_html = f""" <div style="max-height: 1000px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"> {processed_data} </div> """ 
+
+        components.html(wrapped_html, height=1000) # Keeps scrollability
+
+
+        # st.markdown(
         
-                processed_data
-            , 
-            unsafe_allow_html=True)  # Render HTML from processed_data
+        #         processed_data
+        #     , 
+        #     unsafe_allow_html=True)  # Render HTML from processed_data
