@@ -1,5 +1,6 @@
 import streamlit as st
 import time  # to simulate processing time
+from hacklytics_backend import get_response
 
 # Set page configuration for wide layout
 st.set_page_config(layout="wide")
@@ -205,12 +206,13 @@ with col1:
             user_data = {
                 "name": name,
                 "age": age,
-                "conditions": [condition.strip() for condition in conditions.split(",")] if conditions else [],
+                "conditions": [condition.strip() for condition in st.session_state.conditions] if st.session_state.conditions else [],
+
                 "budget": budget,
             }
 
             # Send the JSON data to backend for processing
-            processed_data = hacklytics_backend.process_data(user_data)
+            processed_data = get_response(user_data)
 
             # Display the processed result to the user
             st.write("Processed Data:", processed_data)
