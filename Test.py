@@ -125,8 +125,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# Heading
-st.header("INSURELINK")
+#Main Heading
+st.markdown("<h1 style='text-align: center;'>INSURELINK</h1>", unsafe_allow_html=True)
 
 # Function to get suitable insurance based on input
 def get_suitable_insurance(age, conditions, plan_type, budget, family_ages=[]):
@@ -160,7 +160,7 @@ col1, spacer, col2 = st.columns([1.5, 0.5, 3])  # Increased col2 size & reduced 
 with col1:
 
     # Heading
-    st.header("Patient Data Input")
+    st.header("Personal Details")
 
     # Check if the user is an individual or a family
     plan_type = st.radio("Select Plan Type:", ["Individual", "Family"])
@@ -218,7 +218,7 @@ with col1:
 
 # Column 2: Display suitable insurance plans
 with col2:
-    st.header("Suitable Insurance Plans")
+    st.header("Insurance Recommendations")
 
     # Display the processed HTML data in col2 after form submission
     if submit_button:
