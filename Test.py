@@ -165,6 +165,10 @@ with col1:
     # Check if the user is an individual or a family
     plan_type = st.radio("Select Plan Type:", ["Individual", "Family"])
 
+    if plan_type == "Individual":
+        #Set family_size to 0
+        st.session_state.family_size = 0
+
     if plan_type == "Family":
         # Ask for number of family members within the form itself
         st.session_state.family_size = st.number_input("Number of Family Members", min_value=1, step=1)
