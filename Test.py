@@ -214,37 +214,46 @@ with col1:
             # Send the JSON data to backend for processing
             processed_data = get_response(user_data)
 
-            # Display the processed result to the user
-            st.write("Processed Data:", processed_data)
+           
 
 # Column 2: Display suitable insurance plans
+# Column 2: Display suitable insurance plans and processed HTML data
 with col2:
     st.header("Suitable Insurance Plans")
 
-    # Placeholder for estimated monthly cost
-    st.markdown(f"## Estimated Monthly Cost: **${budget // 12:,}**")  # Approximate monthly budget
+    # # Placeholder for estimated monthly cost
+    # st.markdown(f"## Estimated Monthly Cost: **${budget // 12:,}**")  # Approximate monthly budget
 
-    # Display insurance options (simulate a loading effect)
-    st.markdown("### Select an Insurance Plan:")
+    # # Display insurance options (simulate a loading effect)
+    # st.markdown("### Select an Insurance Plan:")
 
-    cols = st.columns(4)  # Create four equal columns
+    # cols = st.columns(4)  # Create four equal columns
 
-    # Here, you can simulate the time it takes to fetch insurance plans
-    with st.spinner("Fetching insurance options..."):
-        time.sleep(3)  # Simulate some delay before displaying plans
+    # # Here, you can simulate the time it takes to fetch insurance plans
+    # with st.spinner("Fetching insurance options..."):
+    #     time.sleep(3)  # Simulate some delay before displaying plans
 
-    plans = get_suitable_insurance(age, st.session_state.conditions, plan_type, budget, family_ages)
+    # plans = get_suitable_insurance(age, st.session_state.conditions, plan_type, budget, family_ages)
 
-    for idx, plan in enumerate(plans):
-        with cols[idx % 4]:
-            st.markdown(
-                f"""
-                <div class="insurance-card">
-                    <div>
-                        <div class="insurance-plan-title">{plan}</div>
-                        <div class="insurance-plan-description">Details for {plan}</div>
-                    </div>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+    # for idx, plan in enumerate(plans):
+    #     with cols[idx % 4]:
+    #         st.markdown(
+    #             f"""
+    #             <div class="insurance-card">
+    #                 <div>
+    #                     <div class="insurance-plan-title">{plan}</div>
+    #                     <div class="insurance-plan-description">Details for {plan}</div>
+    #                 </div>
+    #             </div>
+    #             """,
+    #             unsafe_allow_html=True
+    #         )
+    
+    # Display the processed HTML data in col2 after form submission
+    if submit_button:
+        st.markdown(f"## Processed Data", unsafe_allow_html=True)
+        st.markdown(
+        
+                processed_data
+            , 
+            unsafe_allow_html=True)  # Render HTML from processed_data
