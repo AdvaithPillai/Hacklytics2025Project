@@ -124,6 +124,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+
+# Heading
+st.header("INSURELINK")
+
 # Function to get suitable insurance based on input
 def get_suitable_insurance(age, conditions, plan_type, budget, family_ages=[]):
     """Returns suitable insurance plans based on age, conditions, and plan type."""
@@ -219,6 +223,7 @@ with col2:
     # Display the processed HTML data in col2 after form submission
     if submit_button:
         st.markdown(f"## Processed Data", unsafe_allow_html=True)
-        wrapped_html = f""" <div style="max-height: 1000px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"> {processed_data} </div> """ 
+        trimmed_data = processed_data[8:]
+        wrapped_html = f""" <div style="max-height: 1000px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"> {trimmed_data} </div> """ 
 
         components.html(wrapped_html, height=1000) # Keeps scrollability
