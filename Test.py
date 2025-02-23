@@ -222,8 +222,12 @@ with col2:
 
     # Display the processed HTML data in col2 after form submission
     if submit_button:
-        st.markdown(f"## Processed Data", unsafe_allow_html=True)
+        
+        #Trim Initial Output
         trimmed_data = processed_data[8:]
+
+        #Wrap the code into a HTML container
         wrapped_html = f""" <div style="max-height: 1000px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"> {trimmed_data} </div> """ 
 
-        components.html(wrapped_html, height=1000) # Keeps scrollability
+        #Keeps scrollability
+        components.html(wrapped_html, height=1000)
